@@ -6,6 +6,12 @@ source config/.env
 # Set the correct Wine prefix to use user's home directory
 export WINEPREFIX=/home/steam/.wine
 
+# Set up virtual X server using Xvfb
+Xvfb :1 -screen 0 1024x768x16 &
+
+# Set the DISPLAY environment variable
+export DISPLAY=:1
+
 # Check if SteamCMD directory exists
 if [ ! -d "/home/steam/steamcmd" ]; then
   echo "SteamCMD directory not found. Make sure you have set up the volume correctly."
@@ -13,7 +19,7 @@ if [ ! -d "/home/steam/steamcmd" ]; then
 fi
 
 # Log in to SteamCMD using the provided credentials
-/home/steam/steamcmd/steamcmd.sh +login "$STEAM_USERNAME" "$STEAM_PASSWORD" +force_install_dir /home/steam/battlebit +app_update 671860 validate +quit
+/home/steam/steamcmd/steamcmd.sh +force_install_dir /home/steam/battlebit +login "$STEAM_USERNAME" "$STEAM_PASSWORD" +app_update 671860 validate +quit
 
 # Check if the game directory exists
 if [ ! -d "/home/steam/battlebit" ]; then
@@ -72,4 +78,4 @@ echo "/-----------------------------/"
 echo "Launching the BattleBit game server..."
 
 # Run the BattleBit game server using Wine with the formulated arguments
-wine /home/steam/battlebit/BattleBit.exe "${battlebit_args[@]}"
+exec wine /home/steam/battlebit/BattleBit.exe "${battlebit_args[@]}"
