@@ -1,0 +1,11 @@
+version: '3'
+services:
+  bbd:
+    container_name: battlebit-docker
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./config:/home/steam/config
+    env_file:
+      - config/.env
