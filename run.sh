@@ -6,6 +6,9 @@ source config/.env
 # Set the correct Wine prefix to use user's home directory
 export WINEPREFIX=/home/steam/.wine
 
+# Remove X Server lock
+rm -rf /tmp/.X1-lock
+
 # Set up virtual X server using Xvfb
 Xvfb :1 -screen 0 1024x768x16 &
 
@@ -78,4 +81,5 @@ echo "/-----------------------------/"
 echo "Launching the BattleBit game server..."
 
 # Run the BattleBit game server using Wine with the formulated arguments
-exec wine /home/steam/battlebit/BattleBit.exe "${battlebit_args[@]}"
+cd /home/steam/battlebit
+exec wine ./BattleBit.exe "${battlebit_args[@]}"
