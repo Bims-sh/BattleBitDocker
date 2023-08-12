@@ -22,7 +22,11 @@ if [ ! -d "/home/steam/steamcmd" ]; then
 fi
 
 # Log in to SteamCMD using the provided credentials
-/home/steam/steamcmd/steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir /home/steam/battlebit +login "$STEAM_USERNAME" "$STEAM_PASSWORD" +app_update 671860 validate +quit
+if [ "$ENABLE_BETA" = true ]; then
+  /home/steam/steamcmd/steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir /home/steam/battlebit +login "$STEAM_USERNAME" "$STEAM_PASSWORD" +app_update 671860 -beta "$BETA_NAME" validate +quit
+else
+  /home/steam/steamcmd/steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir /home/steam/battlebit +login "$STEAM_USERNAME" "$STEAM_PASSWORD" +app_update 671860 validate +quit
+fi
 
 # Check if the game directory exists
 if [ ! -d "/home/steam/battlebit" ]; then
@@ -81,5 +85,5 @@ echo "/-----------------------------/"
 echo "Launching the BattleBit game server..."
 
 # Run the BattleBit game server using Wine with the formulated arguments
-cd /home/steam/battlebit
+cd /home/steam/battlebit || echo "Failed to change directory to /home/steam/battlebit" && exit 1
 exec wine ./BattleBit.exe "${battlebit_args[@]}"
