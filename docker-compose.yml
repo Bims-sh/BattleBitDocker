@@ -7,8 +7,6 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./config:/home/steam/config
-      # Uncomment this line to use the dir ./game with the game files
-      # inside and comment the steam install line inside the run.sh
-      # - ./game:/home/steam/battlebit
+      - ./battlebit:/home/steam/battlebit
     env_file:
       - config/.env

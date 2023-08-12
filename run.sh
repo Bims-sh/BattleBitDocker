@@ -19,7 +19,7 @@ if [ ! -d "/home/steam/steamcmd" ]; then
 fi
 
 # Log in to SteamCMD using the provided credentials
-/home/steam/steamcmd/steamcmd.sh +force_install_dir /home/steam/battlebit +login "$STEAM_USERNAME" "$STEAM_PASSWORD" +app_update 671860 validate +quit
+/home/steam/steamcmd/steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir /home/steam/battlebit +login "$STEAM_USERNAME" "$STEAM_PASSWORD" +app_update 671860 validate +quit
 
 # Check if the game directory exists
 if [ ! -d "/home/steam/battlebit" ]; then
