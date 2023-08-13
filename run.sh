@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Load environment variables from .env file
-source config/.env
+source /home/steam/config/.env
 
 # Set the correct Wine prefix to use user's home directory
 export WINEPREFIX=/home/steam/.wine
@@ -22,10 +22,10 @@ if [ ! -d "/home/steam/steamcmd" ]; then
 fi
 
 # Log in to SteamCMD using the provided credentials
-if [ "$ENABLE_BETA" = true ]; then
-  /home/steam/steamcmd/steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir /home/steam/battlebit +login "$STEAM_USERNAME" "$STEAM_PASSWORD" +app_update 671860 -beta "$BETA_NAME" validate +quit
+if [ "$ENABLE_BETA" = "true" ]; then
+  /home/steam/steamcmd/steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir /home/steam/battlebit +login $(echo "$STEAM_USERNAME" | sed $'s/\r//') $(echo "$STEAM_PASSWORD" | sed $'s/\r//') +app_update 671860 -beta "$BETA_NAME" validate +quit
 else
-  /home/steam/steamcmd/steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir /home/steam/battlebit +login "$STEAM_USERNAME" "$STEAM_PASSWORD" +app_update 671860 validate +quit
+  /home/steam/steamcmd/steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir /home/steam/battlebit +login $(echo "$STEAM_USERNAME" | sed $'s/\r//') $(echo "$STEAM_PASSWORD" | sed $'s/\r//') +app_update 671860 validate +quit
 fi
 
 # Check if the game directory exists
@@ -85,5 +85,8 @@ echo "/-----------------------------/"
 echo "Launching the BattleBit game server..."
 
 # Run the BattleBit game server using Wine with the formulated arguments
+# Run the BattleBit game server using Wine with the formulated arguments
 cd /home/steam/battlebit || echo "Failed to change directory to /home/steam/battlebit" && exit 1
-exec wine ./BattleBit.exe "${battlebit_args[@]}"
+
+# Redirect stdout to the log file
+wine ./BattleBit.exe "${battlebit_args[@]}" > /home/steam/battlebit.log 2>&1
