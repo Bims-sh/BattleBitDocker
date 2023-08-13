@@ -13,7 +13,7 @@ RUN apt-get update \
         lib32stdc++6 \
         libtinfo5 \
         software-properties-common \
-        wine-development winbind xvfb screen \
+        wine winbind xvfb screen \
     && rm -rf /var/lib/apt/lists/*
 
 # Install wine32

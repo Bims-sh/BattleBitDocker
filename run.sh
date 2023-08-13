@@ -21,11 +21,16 @@ if [ ! -d "/home/steam/steamcmd" ]; then
   exit 1
 fi
 
+# Fix windows newline characters for steam credentials
+steamusername=$(echo -n "$STEAM_USERNAME" | sed $'s/\r//')
+steampassword=$(echo -n "$STEAM_PASSWORD" | sed $'s/\r//')
+betaname=$(echo -n "$BETA_NAME" | sed $'s/\r//')
+
 # Log in to SteamCMD using the provided credentials
 if [ "$ENABLE_BETA" = "true" ]; then
-  /home/steam/steamcmd/steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir /home/steam/battlebit +login $(echo "$STEAM_USERNAME" | sed $'s/\r//') $(echo "$STEAM_PASSWORD" | sed $'s/\r//') +app_update 671860 -beta "$BETA_NAME" validate +quit
+  /home/steam/steamcmd/steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir /home/steam/battlebit +login "$steamusername" "$steampassword" +app_update 671860 -beta "$betaname" validate +quit
 else
-  /home/steam/steamcmd/steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir /home/steam/battlebit +login $(echo "$STEAM_USERNAME" | sed $'s/\r//') $(echo "$STEAM_PASSWORD" | sed $'s/\r//') +app_update 671860 validate +quit
+  /home/steam/steamcmd/steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir /home/steam/battlebit +login "$steamusername" "$steampassword" +app_update 671860 validate +quit
 fi
 
 # Check if the game directory exists
@@ -85,8 +90,7 @@ echo "/-----------------------------/"
 echo "Launching the BattleBit game server..."
 
 # Run the BattleBit game server using Wine with the formulated arguments
-# Run the BattleBit game server using Wine with the formulated arguments
-cd /home/steam/battlebit || echo "Failed to change directory to /home/steam/battlebit" && exit 1
+cd /home/steam/battlebit
 
 # Redirect stdout to the log file
-wine ./BattleBit.exe "${battlebit_args[@]}" > /home/steam/battlebit.log 2>&1
+exec wine ./BattleBit.exe "${battlebit_args[@]}"
