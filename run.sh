@@ -24,13 +24,14 @@ fi
 # Fix windows newline characters for steam credentials
 steamusername=$(echo -n "$STEAM_USERNAME" | sed $'s/\r//')
 steampassword=$(echo -n "$STEAM_PASSWORD" | sed $'s/\r//')
+steam2facode=$(wget "$STEAM_2FA_URL" -q -O -)
 betaname=$(echo -n "$BETA_NAME" | sed $'s/\r//')
 
 # Log in to SteamCMD using the provided credentials
 if [ "$ENABLE_BETA" = "true" ]; then
-  /home/steam/steamcmd/steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir /home/steam/battlebit +login "$steamusername" "$steampassword" +app_update 671860 -beta "$betaname" validate +quit
+  /home/steam/steamcmd/steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir /home/steam/battlebit +login "$steamusername" "$steampassword" $steam2facode +app_update 671860 -beta "$betaname" validate +quit
 else
-  /home/steam/steamcmd/steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir /home/steam/battlebit +login "$steamusername" "$steampassword" +app_update 671860 validate +quit
+  /home/steam/steamcmd/steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir /home/steam/battlebit +login "$steamusername" "$steampassword" $steam2facode +app_update 671860 validate +quit
 fi
 
 # Check if the game directory exists
