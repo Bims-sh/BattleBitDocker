@@ -19,15 +19,15 @@
 - [Question: I can't connect to my server, I have 'Error while joining: NoResponse' on the top left of my screen.](#question-i-cant-connect-to-my-server-i-have-error-while-joining-noresponse-on-the-top-left-of-my-screen)
 - [Question: I can't connect to my server, I have 'Failed to connect! : CODE [NoResponse : 1]' on the loading screen.](#question-i-cant-connect-to-my-server-i-have-failed-to-connect--code-noresponse--1-on-the-loading-screen)
 
-### Question: I'm getting the error 'Couldn't read the package, Disconnected from master server'.
+### Question: I'm getting the error `Couldn't read the package, Disconnected from master server`.
 Answer ➜ You're not whitelisted or your firewall prevents the GameServer from registering on the Master server.
 
-### Question: I can't connect to my server, I have 'Error while joining: NoResponse' on the top left of my screen.
+### Question: I can't connect to my server, I have `Error while joining: NoResponse` on the top left of my screen.
 Answer ➜ Something prevents you from connecting to the GameServer. It could be your firewall, using the wrong ports, or not forwarding them correctly.
     1. Make sure you are using the correct ports (the ones you provided to Oki, and the same port +1).
     2. The game uses UDP ports, so ensure the ports are open in your firewall (e.g., ufw).
 
-### Question: I can't connect to my server, I have 'Failed to connect! : CODE [NoResponse : 1]' on the loading screen.
+### Question: I can't connect to my server, I have `Failed to connect! : CODE [NoResponse : 1]` on the loading screen.
 Answer ➜ This Docker uses ApiEndpoint in the launch args:
    1. If you want to use an API, make sure you're using the correct `IP:port`. If you're running your API server on the host, the IP should be `172.17.0.1`.
    2. If you don't want to use an API, delete the line "-ApiEndpoint=$ApiEndpoint" from `run.sh`.
