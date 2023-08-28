@@ -10,3 +10,6 @@ services:
       - ./battlebit:/home/steam/battlebit
     env_file:
       - config/.env
+    ports:
+      -"29999:29999/udp"
+      -"30000:30000/udp"
