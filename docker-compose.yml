@@ -11,5 +11,5 @@ services:
     env_file:
       - config/.env
     ports:
-      -"29294:29294/udp"
-      -"29295:29295/udp"
+      -"29999:29999/udp"
+      -"30000:30000/udp"
