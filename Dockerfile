@@ -1,5 +1,5 @@
 # Use an official Ubuntu as the base image
-FROM python:3-slim-bookworm
+FROM ubuntu:latest
 
 # Set environment variables
 ENV DEBIAN_FRONTEND=noninteractive
