@@ -24,7 +24,7 @@ docker run --rm -it \
     -v $(pwd)/data/battlebit:/home/steam/battlebit \
     -v $(pwd)/data/Steam:/root/Steam \
     --env-file ./config/.env \
-    battlebit-docker bash login.sh
+    ghcr.io/jackblk/battlebitdocker bash login.sh
 ```
 
 ---

@@ -2,9 +2,11 @@ version: '3'
 services:
   battlebit-docker:
     container_name: battlebit-docker
-    build:
-      context: .
-      dockerfile: Dockerfile
+    pull_policy: always
+    image: ghcr.io/jackblk/battlebitdocker:latest
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
     volumes:
       - ./config:/home/steam/config
       - ./data/battlebit:/home/steam/battlebit

@@ -4,3 +4,4 @@ Dockerfile
 README.md
 data/
 tmp/
+config/
