@@ -1,15 +1,14 @@
 # Server Settings
 Name="Test Server"
 Password="abc123"
-AntiCheat=none
+AntiCheat=EAC
 Hz=60
-Port=29999
+Port=30000
 MaxPing=150
 LocalIP=0.0.0.0
 VoxelMode=false
-# Config
-ConfigPath=""
-ApiEndpoint=30001
+# Custom API Endpoint, example: 127.0.0.1:29999
+ApiEndpoint=
 # Server Size
 FixedSize=none
 FirstSize=tiny
