@@ -1,15 +1,16 @@
 version: '3'
 services:
-  bbd:
+  battlebit-docker:
     container_name: battlebit-docker
     build:
       context: .
       dockerfile: Dockerfile
     volumes:
       - ./config:/home/steam/config
-      - ./battlebit:/home/steam/battlebit
+      - ./data/battlebit:/home/steam/battlebit
+      - ./data/Steam:/root/Steam
     env_file:
       - config/.env
     ports:
-      -"29999:29999/udp"
-      -"30000:30000/udp"
+      - "30000:30000/udp"
+      - "30001:30001/udp"
