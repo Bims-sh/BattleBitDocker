@@ -1,5 +1,5 @@
 # Use an official Ubuntu as the base image
-FROM ubuntu:latest
+FROM python:3-slim-bookworm
 
 # Set environment variables
 ENV DEBIAN_FRONTEND=noninteractive
@@ -25,17 +25,18 @@ RUN dpkg --add-architecture i386 \
 # Create directories for SteamCMD and BattleBit
 RUN mkdir -p /home/steam/steamcmd /home/steam/battlebit
 
-# Download and install SteamCMD
+# Download and install SteamCMD, update it, force install dir
 WORKDIR /home/steam/steamcmd
 RUN wget -q https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz \
     && tar -xvzf steamcmd_linux.tar.gz \
-    && rm steamcmd_linux.tar.gz
+    && rm steamcmd_linux.tar.gz \
+    && /home/steam/steamcmd/steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir /home/steam/battlebit +quit
 
 # Set the working directory
 WORKDIR /home/steam
 
 # Copy the run script into the container
-COPY run.sh .
+COPY run.sh login.sh ./
 
 # Give execute permissions to the run script
 RUN chmod +x run.sh

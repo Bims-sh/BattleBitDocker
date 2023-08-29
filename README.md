@@ -2,14 +2,30 @@
 
 ### :warning: HIGHLY EXPERIMENTAL :warning:
 
+
 ### How to run:
-**1.** Copy the `.env.example` to the `config/` folder, rename it to `.env` and set steam username and password (make sure 2FA is off)<br>
+**1.** Copy the `.env.example` to the `config/` folder, rename it to `.env` and set steam username and password<br>
 
 **2.** Change the `port` to your servers port inside the `docker-compose` file and also make sure you add one port above it (`30000` and `30001` in the example file).<br>
 
-**3.** Start the containers with `docker compose up -d` after configuring the server inside `config/server.conf`<br>
+**3.** (Optional) If you have 2FA, refer the below section to login
 
-**4.** Success!<br>
+**4.** Start the containers with `docker compose up -d` after configuring the server inside `config/server.conf`<br>
+
+**5.** Success!<br>
+
+### (Optional) Login with 2FA
+
+You only need to do this at the first time, and only when the login session is expired.
+
+```shell
+docker compose build
+docker run --rm -it \
+    -v $(pwd)/data/battlebit:/home/steam/battlebit \
+    -v $(pwd)/data/Steam:/root/Steam \
+    --env-file ./config.env \
+    battlebit-docker bash login.sh
+```
 
 ---
 
