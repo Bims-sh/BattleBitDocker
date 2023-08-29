@@ -23,7 +23,7 @@ docker compose build
 docker run --rm -it \
     -v $(pwd)/data/battlebit:/home/steam/battlebit \
     -v $(pwd)/data/Steam:/root/Steam \
-    --env-file ./config.env \
+    --env-file ./config/.env \
     battlebit-docker bash login.sh
 ```
 
