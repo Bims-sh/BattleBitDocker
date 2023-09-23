@@ -1,6 +1,17 @@
 # BattleBit Docker
 
-### :warning: HIGHLY EXPERIMENTAL :warning:
+### ‼️ PLEASE READ ‼️
+
+This repos has gained a few stars in the last couple of weeks so I should share some more infos here:<br>
+
+Running BattleBit Servers on Linux is highly experimental and will cause weird behaviours such as desync, double packets sent or high ping.<br>
+The above mentioned issues appear on the current setup using wine.<br>
+
+Consider checking out [a fork](https://github.com/jackblk/battlebit-server-docker) of this project by @jackblk that has been updated with a few more features.
+
+:warning: I strongly advice against running any public servers with this for now :warning:
+
+---
 
 ### How to run:
 **1.** Copy the `.env.example` to the `config/` folder, rename it to `.env` and set steam username and password (make sure 2FA is off)<br>
