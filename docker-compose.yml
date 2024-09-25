@@ -1,4 +1,3 @@
-version: '3'
 services:
   bbd:
     container_name: battlebit-docker
@@ -6,8 +5,8 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ./config:/home/steam/config
-      - ./battlebit:/home/steam/battlebit
+      - ./config:/battlebit/config
+      - ./gamefiles:/battlebit/game
     env_file:
       - config/.env
     ports:

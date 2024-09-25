@@ -1,22 +1,18 @@
 #!/bin/bash
 
 # Load environment variables from .env file
-source /home/steam/config/.env
+source /battlebit/config/.env
 
-# Set the correct Wine prefix to use user's home directory
-export WINEPREFIX=/home/steam/.wine
+# Paths
+export WINE_PATH="/battlebit/wine-ge/lutris-GE-Proton8-26-x86_64"
+export PATH="$PATH:/battlebit/steamcmd:$WINE_PATH/bin"
 
-# Remove X Server lock
-rm -rf /tmp/.X1-lock
-
-# Set up virtual X server using Xvfb
-Xvfb :1 -screen 0 1024x768x16 &
-
-# Set the DISPLAY environment variable
-export DISPLAY=:1
+# Wine Prefix
+export WINEPREFIX="/battlebit/game/.wine64"
+export WINEPREFIX_FONTCONFIG_PATH="/usr/lib/x86_64-linux-gnu/libfreetype.so.6"
 
 # Check if SteamCMD directory exists
-if [ ! -d "/home/steam/steamcmd" ]; then
+if [ ! -d "/battlebit/steamcmd" ]; then
   echo "SteamCMD directory not found. Make sure you have set up the volume correctly."
   exit 1
 fi
@@ -24,26 +20,27 @@ fi
 # Fix windows newline characters for steam credentials
 steamusername=$(echo -n "$STEAM_USERNAME" | sed $'s/\r//')
 steampassword=$(echo -n "$STEAM_PASSWORD" | sed $'s/\r//')
+steamguardcode=$(echo -n "$STEAM_GUARD_CODE" | sed $'s/\r//')
 betaname=$(echo -n "$BETA_NAME" | sed $'s/\r//')
 
 # Log in to SteamCMD using the provided credentials
-if [ "$ENABLE_BETA" = "true" ]; then
-  /home/steam/steamcmd/steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir /home/steam/battlebit +login "$steamusername" "$steampassword" +app_update 671860 -beta "$betaname" validate +quit
-else
-  /home/steam/steamcmd/steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir /home/steam/battlebit +login "$steamusername" "$steampassword" +app_update 671860 validate +quit
-fi
+#if [ "$ENABLE_BETA" = "true" ]; then
+#  steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir /battlebit/game +set_steam_guard_code "$steamguardcode" +login "$steamusername" "$steampassword" +app_update 671860 -beta "$betaname" validate +quit
+#else
+#  steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir /battlebit/game +set_steam_guard_code "$steamguardcode" +login "$steamusername" "$steampassword" +app_update 671860 validate +quit
+#fi
 
 # Check if the game directory exists
-if [ ! -d "/home/steam/battlebit" ]; then
+if [ ! -d "/battlebit/game" ]; then
   echo "Game directory not found. There might be an issue with downloading the game."
   exit 1
 fi
 
 # Read server configurations from /config/server.conf
-if [ -f "/home/steam/config/server.conf" ]; then
-  source /home/steam/config/server.conf
+if [ -f "/battlebit/config/server.conf" ]; then
+  source /battlebit/config/server.conf
 else
-  echo "Server config file not found: /home/steam/config/server.conf"
+  echo "Server config file not found: /battlebit/config/server.conf"
   exit 1
 fi
 
@@ -89,8 +86,13 @@ echo "FirstMap: $FirstMap"
 echo "/-----------------------------/"
 echo "Launching the BattleBit game server..."
 
-# Run the BattleBit game server using Wine with the formulated arguments
-cd /home/steam/battlebit
+# Start Xvfb in the background with 1x1 resolution
+Xvfb :99 -screen 0 1x1x16 &  # Start Xvfb with 1x1 resolution
+export DISPLAY=:99            # Set DISPLAY environment variable
+
+# Run from the logs directory so we don't have to move them outselves
+mkdir -p /battlebit/game/logs
+cd /battlebit/game/logs
 
 # Redirect stdout to the log file
-exec wine ./BattleBit.exe "${battlebit_args[@]}"
+WINEDEBUG=-all WINEARCH=win64 wine /battlebit/game/BattleBit.exe "${battlebit_args[@]}"
