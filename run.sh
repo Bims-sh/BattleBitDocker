@@ -95,4 +95,16 @@ mkdir -p /battlebit/game/logs
 cd /battlebit/game/logs
 
 # Redirect stdout to the log file
-WINEDEBUG=-all WINEARCH=win64 wine /battlebit/game/BattleBit.exe "${battlebit_args[@]}"
+WINEDEBUG=-all WINEARCH=win64 wineconsole /battlebit/game/BattleBit.exe "${battlebit_args[@]}" &
+
+sleep 3
+
+LOG_DIR="/battlebit/game/logs"
+LOG_FILE=$(ls -t "$LOG_DIR"/log_*.txt | head -n 1)
+
+if [ -f "$LOG_FILE" ]; then
+  echo "Tailing the latest log file: $LOG_FILE"
+  tail -f "$LOG_FILE"
+else
+  echo "No log file found in $LOG_DIR. Logging may be redirected elsewhere."
+fi
