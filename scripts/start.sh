@@ -64,15 +64,16 @@ start_server() {
     wine "$GAME_DIR/BattleBit.exe" "${server_args[@]}" >"$wine_log" 2>&1 &
     wine_pid=$!
 
+    if [ "${BB_ACCEPT_EULA:-false}" = "true" ]; then
+        printf 'Accept EULA & TOS=true\r\nEULA & ToS can be found at https://agreements.battlebit.cloud/GameServerTos.pdf' > "$LOGS_DIR/eula.txt"
+    fi
+
     # Record start time for log file detection
     local start_time; start_time=$(date +%s)
 
     # Wait for the game to create a new log file
     log_file=""
     for _ in $(seq 1 60); do
-        if [ "${BB_ACCEPT_EULA:-false}" = "true" ]; then
-            printf 'Accept EULA & TOS=true\nEULA & ToS can be found at https://agreements.battlebit.cloud/GameServerTos.pdf' > "$LOGS_DIR/eula.txt"
-        fi
         log_file=$(find "$LOGS_DIR" -name "log_*.txt" 2>/dev/null \
             | while IFS= read -r f; do
                   [ "$(date -r "$f" +%s 2>/dev/null)" -ge "$start_time" ] && echo "$f" && break
