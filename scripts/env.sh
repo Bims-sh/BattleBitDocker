@@ -31,6 +31,7 @@ export STEAM_PASSWORD="${STEAM_PASSWORD:-}"
 export STEAM_SHARED_SECRET="${STEAM_SHARED_SECRET:-}"
 export STEAM_BRANCH="${BB_STEAM_BRANCH:-}"
 export BB_SKIP_UPDATE="${BB_SKIP_UPDATE:-false}"
+export BB_ACCEPT_EULA="${BB_ACCEPT_EULA:-false}"
 
 # ===> Build Functions --------------------------------------------------------------
 # Prints one argument per line so callers can safely read into an array
