@@ -32,7 +32,10 @@ apt-get install --no-install-recommends -y \
     bash \
     unzip \
     adduser \
-    python3
+    python3 \
+    libegl1 \
+    libgl1-mesa-dri \
+    libgles2
 rm -rf /var/lib/apt/lists/*
 
 # Remove default debian user if it exists

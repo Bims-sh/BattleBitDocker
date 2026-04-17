@@ -31,7 +31,7 @@ update_group_id() {
 
 start_server() {
     log_info "Starting BattleBit server..."
-    export WINEDEBUG="${WINEDEBUG:--all}"
+    export WINEDEBUG="${WINEDEBUG:-+err}"
     export WINEESYNC=1
     # Disable wine-gecko and wine-mono download prompts (not needed for IL2CPP)
     export WINEDLLOVERRIDES="mscoree=disabled;mshtml=disabled"
