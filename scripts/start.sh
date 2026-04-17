@@ -42,8 +42,13 @@ start_server() {
     # Clean up stale Xvfb lock from previous run
     pkill Xvfb 2>/dev/null || true
     rm -f /tmp/.X0-lock /tmp/.X11-unix/X0
-    Xvfb :0 -screen 0 1024x768x16 -nolisten tcp 2>/dev/null &
+    Xvfb :0 -screen 0 8x8x8 -nolisten tcp &
+    xvfb_pid=$!
     sleep 1
+    if ! kill -0 "$xvfb_pid" 2>/dev/null; then
+        log_error "Xvfb failed to start"
+        exit 1
+    fi
     export DISPLAY=:0
 
     if [ ! -f "$HOME/.wine/system.reg" ]; then
@@ -88,6 +93,7 @@ start_server() {
     tail_pid=$!
 
     wait "$wine_pid"
+    sleep 1
     kill "$tail_pid" 2>/dev/null
 }
 
