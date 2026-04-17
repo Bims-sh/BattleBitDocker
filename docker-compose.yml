@@ -1,0 +1,27 @@
+services:
+  battlebit:
+    container_name: battlebitdocker
+    build:
+      context: .
+      args:
+        BASE_IMAGE: ghcr.io/steamcmd/steamcmd:debian
+    image: battlebit:local
+    env_file:
+      - path: .env
+        required: false
+    ports:
+      - "29999:29999/udp"
+    volumes:
+      - battlebit_game:/opt/battlebit/game
+      - battlebit_config:/opt/battlebit/config
+      - battlebit_steam:/opt/battlebit/.local/share/Steam
+      - battlebit_wine:/opt/battlebit/.wine
+      - battlebit_logs:/opt/battlebit/logs
+    restart: "no"
+
+volumes:
+  battlebit_game:
+  battlebit_config:
+  battlebit_steam:
+  battlebit_wine:
+  battlebit_logs:
