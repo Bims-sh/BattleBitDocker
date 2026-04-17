@@ -17,7 +17,7 @@ services:
       - battlebit_steam:/opt/battlebit/.local/share/Steam
       - battlebit_wine:/opt/battlebit/.wine
       - battlebit_logs:/opt/battlebit/logs
-    restart: "no"
+    restart: unless-stopped
 
 volumes:
   battlebit_game:
