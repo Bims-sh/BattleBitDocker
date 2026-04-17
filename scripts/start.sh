@@ -46,19 +46,27 @@ start_server() {
 
     server_args="$(build_args)"
     cd "$LOGS_DIR" || exit 1
-    wine "$GAME_DIR/BattleBit.exe" "${server_args}" >/dev/null 2>&1 &
+    local wine_log="$LOGS_DIR/wine_stderr.log"
+    wine "$GAME_DIR/BattleBit.exe" "${server_args}" >"$wine_log" 2>&1 &
     wine_pid=$!
 
-    # Wait for the game to create a new log file (newer than start time)
+    # Record start time for log file detection
+    local start_time; start_time=$(date +%s)
+
+    # Wait for the game to create a new log file
     log_file=""
-    for _ in $(seq 1 30); do
-        log_file=$(find "$LOGS_DIR" -name "log_*.txt" -newer /proc/$wine_pid 2>/dev/null | head -1)
+    for _ in $(seq 1 60); do
+        log_file=$(find "$LOGS_DIR" -name "log_*.txt" 2>/dev/null \
+            | while IFS= read -r f; do
+                  [ "$(date -r "$f" +%s 2>/dev/null)" -ge "$start_time" ] && echo "$f" && break
+              done | head -1)
         [ -n "$log_file" ] && break
         sleep 1
     done
 
     if [ -z "$log_file" ]; then
-        log_warn "No log file found after 30s, showing raw output..."
+        log_warn "No log file found after 60s. Wine output:"
+        cat "$wine_log" >&2
         wait "$wine_pid"
         return
     fi
