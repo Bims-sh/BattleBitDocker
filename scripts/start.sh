@@ -44,10 +44,10 @@ start_server() {
         wineserver -w
     fi
 
-    server_args="$(build_args)"
+    mapfile -t server_args < <(build_args)
     cd "$LOGS_DIR" || exit 1
     local wine_log="$LOGS_DIR/wine_stderr.log"
-    wine "$GAME_DIR/BattleBit.exe" "${server_args}" >"$wine_log" 2>&1 &
+    wine "$GAME_DIR/BattleBit.exe" "${server_args[@]}" >"$wine_log" 2>&1 &
     wine_pid=$!
 
     # Record start time for log file detection

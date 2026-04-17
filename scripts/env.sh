@@ -33,32 +33,25 @@ export STEAM_BRANCH="${BB_STEAM_BRANCH:-}"
 export BB_SKIP_UPDATE="${BB_SKIP_UPDATE:-false}"
 
 # ===> Build Functions --------------------------------------------------------------
+# Prints one argument per line so callers can safely read into an array
+# (handles server names with spaces correctly)
 build_args() {
-    local args="-batchmode -nographics -lowmtumode"
-
-    args+=" -Name=$BB_NAME"
-
-    if [ -n "$BB_PASSWORD" ]; then
-        args+=" -Password=$BB_PASSWORD"
-    fi
-
-    args+=" -LocalIP=$BB_LOCALIP"
-    if [ -n "$BB_BROADCASTIP" ]; then
-        args+=" -BroadcastIP=$BB_BROADCASTIP"
-    fi
-    args+=" -Port=$BB_PORT"
-    if [ -n "$BB_APIENDPOINT" ]; then
-        args+=" -ApiEndpoint=$BB_APIENDPOINT"
-    fi
-    args+=" -Hz=$BB_HZ"
-    args+=" -AntiCheat=$BB_ANTICHEAT"
-    args+=" -MaxPing=$BB_MAXPING"
-    args+=" -VoxelMode=$BB_VOXELMODE"
-    args+=" -FirstGamemode=$BB_FIRSTGAMEMODE"
-    args+=" -FirstMap=$BB_FIRSTMAP"
-    args+=" -FixedSize=$BB_FIXEDSIZE"
-    args+=" -FirstSize=$BB_FIRSTSIZE"
-    args+=" -MaxSize=$BB_MAXSIZE"
-
-    echo "$args"
+    echo "-batchmode"
+    echo "-nographics"
+    echo "-lowmtumode"
+    echo "-Name=$BB_NAME"
+    [ -n "$BB_PASSWORD" ]    && echo "-Password=$BB_PASSWORD"
+    echo "-LocalIP=$BB_LOCALIP"
+    [ -n "$BB_BROADCASTIP" ] && echo "-BroadcastIP=$BB_BROADCASTIP"
+    echo "-Port=$BB_PORT"
+    [ -n "$BB_APIENDPOINT" ] && echo "-ApiEndpoint=$BB_APIENDPOINT"
+    echo "-Hz=$BB_HZ"
+    echo "-AntiCheat=$BB_ANTICHEAT"
+    echo "-MaxPing=$BB_MAXPING"
+    echo "-VoxelMode=$BB_VOXELMODE"
+    echo "-FirstGamemode=$BB_FIRSTGAMEMODE"
+    echo "-FirstMap=$BB_FIRSTMAP"
+    echo "-FixedSize=$BB_FIXEDSIZE"
+    echo "-FirstSize=$BB_FIRSTSIZE"
+    echo "-MaxSize=$BB_MAXSIZE"
 }
