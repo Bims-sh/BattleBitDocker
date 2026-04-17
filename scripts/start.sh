@@ -34,8 +34,16 @@ start_server() {
     export WINEDEBUG="${WINEDEBUG:-+err}"
     export WINEESYNC=1
     # Disable wine-gecko and wine-mono download prompts (not needed for IL2CPP)
-    export WINEDLLOVERRIDES="mscoree=disabled;mshtml=disabled"
+    export WINEDLLOVERRIDES="mscoree=disabled;mshtml=disabled;mmdevapi=disabled"
+    # XDG_RUNTIME_DIR required by Xvfb/Wine on some systems
+    export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/tmp/xdg-runtime-$$}"
+    mkdir -p "$XDG_RUNTIME_DIR"
+    chmod 700 "$XDG_RUNTIME_DIR"
+    # Clean up stale Xvfb lock from previous run
+    pkill Xvfb 2>/dev/null || true
+    rm -f /tmp/.X0-lock /tmp/.X11-unix/X0
     Xvfb :0 -screen 0 1024x768x16 -nolisten tcp 2>/dev/null &
+    sleep 1
     export DISPLAY=:0
 
     if [ ! -f "$HOME/.wine/system.reg" ]; then
@@ -47,9 +55,6 @@ start_server() {
     mapfile -t server_args < <(build_args)
     cd "$LOGS_DIR" || exit 1
 
-    if [ "${BB_ACCEPT_EULA:-false}" = "true" ]; then
-        printf 'Accept EULA & TOS=true\n' > "$LOGS_DIR/eula.txt"
-    fi
     local wine_log="$LOGS_DIR/wine_stderr.log"
     wine "$GAME_DIR/BattleBit.exe" "${server_args[@]}" >"$wine_log" 2>&1 &
     wine_pid=$!
@@ -60,6 +65,9 @@ start_server() {
     # Wait for the game to create a new log file
     log_file=""
     for _ in $(seq 1 60); do
+        if [ "${BB_ACCEPT_EULA:-false}" = "true" ]; then
+            printf 'Accept EULA & TOS=true\nEULA & ToS can be found at https://agreements.battlebit.cloud/GameServerTos.pdf' > "$LOGS_DIR/eula.txt"
+        fi
         log_file=$(find "$LOGS_DIR" -name "log_*.txt" 2>/dev/null \
             | while IFS= read -r f; do
                   [ "$(date -r "$f" +%s 2>/dev/null)" -ge "$start_time" ] && echo "$f" && break
